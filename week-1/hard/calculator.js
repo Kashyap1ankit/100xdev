@@ -13,9 +13,53 @@
         1. the input can have multiple continuous spaces, you're supposed to avoid them and parse the expression correctly
         2. the input can have invalid non-numerical characters like `5 + abc`, you're supposed to throw error for such inputs
 
-  Once you've implemented the logic, test your code by running
+  Once cfj you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator {
+  constructor() {
+    this.result = 0;
+  }
+  add(e) {
+    this.result += e;
+  }
+  subtract(e) {
+    this.result -= e;
+  }
+  multiply(e) {
+    this.result *= e;
+  }
+  divide(e) {
+    if (e == 0) {
+      throw new Error("Can't divide by zero");
+    }
+    this.result /= e;
+  }
+  clear() {
+    this.result = 0;
+  }
 
+  getResult() {
+    return this.result;
+  }
+  calculate(e) {
+    const temporary = e;
+    const clean = temporary.replace(/\s+/g, "");
+    const valid = /^[0-9+\-*/().]+$/.test(clean);
+
+    if (!valid) {
+      throw new Error("Invalid expression.");
+    }
+
+    try {
+      this.result = eval(e);
+    } catch (err) {
+      throw new Error("Invalid expression.");
+    }
+    if (this.result === Infinity) {
+      throw new Error("Cannot divide a number by 0.");
+    }
+    return this.result;
+  }
+}
 module.exports = Calculator;
