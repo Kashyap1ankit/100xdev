@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for 01-requestcount.js</title>
+    <title>Code coverage report for 03-errorcount.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> 01-requestcount.js</h1>
+        <h1><a href="index.html">All files</a> 03-errorcount.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.96% </span>
+                <span class="strong">93.93% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/33</span>
+                <span class='fraction'>31/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.96% </span>
+                <span class="strong">93.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/33</span>
+                <span class='fraction'>31/33</span>
             </div>
         
             
@@ -109,15 +109,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -129,36 +122,43 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const request = require("supertest");
 const assert = require("assert");
 const express = require("express");
 &nbsp;
 const app = express();
-let requestCount = 0;
+let errorCount = 0;
 &nbsp;
 // You have been given an express server which has a few endpoints.
-// Your task is to create a global middleware (app.use) which will
-// maintain a count of the number of requests made to the server in the global
-// requestCount variable
-&nbsp;
-const countRequest = (req, res, next) =&gt; {
-  requestCount++;
-  next();
-};
-&nbsp;
-app.use(express.json());
-app.use(countRequest);
+// Your task is to
+// 1. Ensure that if there is ever an exception, the end user sees a status code of 404
+// 2. Maintain the errorCount variable whose value should go up every time there is an exception in any endpoint
 &nbsp;
 app.get("/user", function (req, res) {
-  res.status(200).json({ name: "john" });
+  throw new Error("User not found")<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
+<span class="cstat-no" title="statement not covered" >  res.status(200).json({ name: "john" });</span>
 });
 &nbsp;
 app.post("/user", function (req, res) {
 <span class="cstat-no" title="statement not covered" >  res.status(200).json({ msg: "created dummy user" });</span>
 });
 &nbsp;
-app.get("/requestCount", function (req, res) {
-  res.status(200).json({ requestCount });
+app.get("/errorCount", function (req, res) {
+  res.status(200).json({ errorCount });
+});
+&nbsp;
+app.use((err, req, res, next) =&gt; {
+  errorCount++;
+  res.status(404).json({
+    status: 404,
+  });
 });
 &nbsp;
 module.exports = app;
