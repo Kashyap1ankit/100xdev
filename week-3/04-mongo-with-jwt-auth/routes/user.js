@@ -14,13 +14,19 @@ router.post("/signup", (req, res) => {
   res.json({ message: "User created successfully" });
 });
 
-router.post("/signin", (req, res) => {
+router.post("/signin", async (req, res) => {
   // Implement admin signup logic
   const { username, password } = req.body;
-  const token = jwt.sign(
-    { username: username, password: password },
-    `${password}`
-  );
+
+  const userId = (
+    await User.findOne({ username: username, password: password })
+  ).id;
+
+  const payload = {
+    username: username,
+    id: userId,
+  };
+  const token = jwt.sign(payload, `${process.env.SECRET_KEy}`);
 
   res.json({ token: token });
 });
@@ -33,12 +39,15 @@ router.get("/courses", async (req, res) => {
 
 router.post("/courses/:courseId", userMiddleware, async (req, res) => {
   // Implement course purchase logic
+
+  //Getting the token form header and then getting the userId from it and courseId from params then finding the course and the user and then pushing the course into users purchased course array
+
   const { authorization } = req.headers;
-  const username = jwt.decode(authorization, { complete: true }).payload
-    .username;
+  const token = authorization.split(" ")[1];
+  const userId = jwt.decode(token, { complete: true }).payload.id;
   const { courseId } = req.params;
   const getCourse = await Course.findById(courseId);
-  const getCurrUser = await User.findOne({ username: username });
+  const getCurrUser = await User.findById(userId);
   getCurrUser.purchasedCourses.push(getCourse);
   getCurrUser.save();
 
@@ -50,15 +59,17 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
   // Implement fetching purchased courses logic
 
+  //Getting the token form header and then getting the userId from it and then getting the populating the purchasedCourse array and then sending the purcahsedCourseArray
+
   const { authorization } = req.headers;
-  const username = jwt.decode(authorization, { complete: true }).payload
-    .username;
-  const getCurrUser = await User.findOne({ username: username });
+  const token = authorization.split(" ")[1];
+  const userId = jwt.decode(token, { complete: true }).payload.id;
+  const getCurrUser = await User.findById(userId);
 
   const getCurrUserCourses = (await getCurrUser.populate("purchasedCourses"))
     .purchasedCourses;
 
-  res.json({ purchasedCourses: `${getCurrUserCourses}` });
+  res.json({ purchasedCourses: getCurrUserCourses });
 });
 
 module.exports = router;
