@@ -6,12 +6,11 @@ async function userMiddleware(req, res, next) {
   // You need to check the headers and validate the admin from the admin DB. Check readme for the exact headers to be expected
 
   try {
+    //Getting the authroization token and then verifying it -- if verified then next otherwise throwing the exception
+
     const { authorization } = req.headers;
-    const password = jwt.decode(authorization, { complete: true }).payload
-      .password;
-
-    const decoded = jwt.verify(authorization, `${password}`);
-
+    const token = authorization.split(" ")[1];
+    const decoded = jwt.verify(token, `${process.env.SECRET_KEY}`);
     if (decoded) {
       next();
     } else {
