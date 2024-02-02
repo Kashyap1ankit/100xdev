@@ -1,0 +1,22 @@
+.card {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  padding: 1%;
+  width: 40%;
+  border: 1px solid white;
+  background-image: linear-gradient(
+    to right,
+    rgba(16, 147, 176, 0.53),
+    rgb(225, 21, 248)
+  );
+  border-radius: 1em;
+}
+
+.card .left-side {
+  width: 100%;
+}
+
+.card .right-side {
+  width: 100%;
+}
