@@ -1,6 +1,6 @@
 export default function Desc({ des }) {
   let styles = {
-    color: "black",
+    color: "white",
     width: "70%",
     fontFamily: "sans-serif",
   };

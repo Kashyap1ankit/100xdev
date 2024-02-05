@@ -1,0 +1,25 @@
+.heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.heading h1 {
+  color: white;
+}
+
+.plus {
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.interest {
+  width: 50%;
+  color: white;
+  margin-top: 0px;
+  margin-bottom: 5%;
+}
+
+.hidden {
+  display: none;
+}

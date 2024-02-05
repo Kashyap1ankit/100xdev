@@ -1,0 +1,16 @@
+.card {
+  margin-top: 2%;
+  padding: 1%;
+  width: 35%;
+  border: 1px solid white;
+  background-image: linear-gradient(
+    to right,
+    rgba(16, 147, 176, 0.53),
+    rgb(225, 21, 248)
+  );
+  border-radius: 1em;
+}
+
+.shadow {
+  box-shadow: 5px 5px 10px white;
+}
