@@ -1,6 +1,5 @@
 import "./App.css";
 import WrapperCard from "./WrapperCard";
-import { useState } from "react";
 
 let id = 1;
 
